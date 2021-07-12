@@ -1,23 +1,28 @@
-import logo from './logo.svg';
-import './App.css';
+import React, {useState, useEffect} from 'react'
 
 function App() {
+  const [type, setType] = useState('users')
+  const [data, setData] = useState([])
+
+  useEffect(() => {
+    console.log('render')
+  })
+
+  useEffect(() => {
+    fetch(`https://jsonplaceholder.typicode.com/${type}`)
+    .then(response => response.json())
+    .then(json => setData(json))
+  }, [type]) // зависит от изменения type
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div >
+      <h1>Ресурс: {type}</h1>
+
+      <button onClick={() => setType('users')}>Пользователи</button>
+      <button onClick={() => setType('todos')}>Todos</button>
+      <button onClick={() => setType('posts')}>Посты</button>
+
+      <pre>{JSON.stringify(data, null, 2)}</pre>
     </div>
   );
 }
